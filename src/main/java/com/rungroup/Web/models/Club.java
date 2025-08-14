@@ -1,8 +1,6 @@
 package com.rungroup.Web.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +18,7 @@ import java.time.LocalDateTime;
 @Table(name = "clubs")
 public class Club {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     private String photoUrl;
