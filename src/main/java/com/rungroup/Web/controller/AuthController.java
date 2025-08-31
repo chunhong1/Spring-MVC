@@ -21,6 +21,12 @@ public class AuthController
         this.userService = userService;
     }
 
+    @GetMapping("/login")
+    public String login()
+    {
+        return "login";
+    }
+
     @GetMapping("/register")
     public String getRegisterForm(Model model)
     {
