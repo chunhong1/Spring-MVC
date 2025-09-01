@@ -35,8 +35,9 @@ public class SecurityConfig
         // Disable csrf due to learning
         http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/login", "/register", "/clubs", "/register/**", "/css/**", "/js/**")
+                .requestMatchers("/login", "/register", "/register/**", "/events", "/events/**", "/clubs", "/clubs/search", "/css/**", "/js/**")
                 .permitAll()
+                .requestMatchers("/clubs/**").authenticated()
                 .and()
                 .formLogin(
                         form -> form

@@ -2,7 +2,10 @@ package com.rungroup.Web.controller;
 
 import com.rungroup.Web.dto.ClubDto;
 import com.rungroup.Web.models.Club;
+import com.rungroup.Web.models.UserEntity;
+import com.rungroup.Web.security.SecurityUtil;
 import com.rungroup.Web.service.ClubService;
+import com.rungroup.Web.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,17 +18,27 @@ import java.util.List;
 public class ClubController
 {
     private ClubService clubService;
+    private UserService userService;
 
     @Autowired
-    public ClubController(ClubService clubService)
+    public ClubController(ClubService clubService, UserService userService)
     {
         this.clubService = clubService;
+        this.userService = userService;
     }
 
     @GetMapping("/clubs")
     public String listClubs(Model model)
     {
+        UserEntity user = new UserEntity();
         List<ClubDto> clubs = clubService.findallClubs();
+        String username = SecurityUtil.getSessionUser();
+        if(username != null)
+        {
+            user = userService.findByUsername(username);
+            model.addAttribute("user", user);
+        }
+        model.addAttribute("user", user);
         model.addAttribute("clubs", clubs);
         return "clubs-list";
     }
@@ -80,7 +93,15 @@ public class ClubController
     @GetMapping("/clubs/{clubId}")
     public String clubDetail(@PathVariable("clubId") long clubId, Model model)
     {
+        UserEntity user = new UserEntity();
         ClubDto clubDto = clubService.findClubById(clubId);
+        String username = SecurityUtil.getSessionUser();
+        if(username != null)
+        {
+            user = userService.findByUsername(username);
+            model.addAttribute("user", user);
+        }
+        model.addAttribute("user", user);
         model.addAttribute("club", clubDto);
         return "clubs-details";
     }
@@ -95,7 +116,15 @@ public class ClubController
     @GetMapping("/clubs/search")
     public String searchClub(@RequestParam(value = "query") String query, Model model)
     {
+        UserEntity user = new UserEntity();
         List<ClubDto> clubs = clubService.searchClubs(query);
+        String username = SecurityUtil.getSessionUser();
+        if(username != null)
+        {
+            user = userService.findByUsername(username);
+            model.addAttribute("user", user);
+        }
+        model.addAttribute("user", user);
         model.addAttribute("clubs", clubs);
         return "clubs-list";
     }
